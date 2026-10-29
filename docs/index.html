@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paneshift: Windows-style Alt-Tab for Mac</title>
+<meta name="description" content="Paneshift makes Cmd+Tab switch between individual windows with live previews, like Alt-Tab on Windows. Feather-light: about 10 MB of memory.">
+<link rel="icon" href="icon.png">
+<meta property="og:title" content="Paneshift: Windows-style Alt-Tab for Mac">
+<meta property="og:description" content="Cmd+Tab between every window, with live previews. About 10 MB of memory.">
+<meta property="og:image" content="https://lmai5.github.io/paneshift/hero.png">
+<style>
+  :root {
+    --bg: #fbfbfd; --surface: #ffffff; --text: #1d1d1f; --muted: #6e6e73; --line: #e5e5ea;
+    --accent: #4f46e5; --accent-text: #ffffff; --accent-soft: #eef2ff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f0f12; --surface: #18181c; --text: #f5f5f7; --muted: #a1a1aa; --line: #2a2a31;
+      --accent: #818cf8; --accent-text: #0f0f12; --accent-soft: #1e1b4b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f0f12; --surface: #18181c; --text: #f5f5f7; --muted: #a1a1aa; --line: #2a2a31;
+    --accent: #818cf8; --accent-text: #0f0f12; --accent-soft: #1e1b4b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 17px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  header { padding: 72px 0 32px; text-align: center; }
+  header img.icon { width: 96px; height: 96px; }
+  h1 { font-size: clamp(40px, 7vw, 64px); line-height: 1.05; letter-spacing: -0.03em; margin: 16px 0 12px; }
+  .tagline { font-size: clamp(19px, 2.6vw, 24px); color: var(--muted); margin: 0 auto 28px; max-width: 640px; }
+  .buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .button {
+    display: inline-block; padding: 13px 24px; border-radius: 12px; font-weight: 600; text-decoration: none;
+    border: 1px solid var(--line); color: var(--text); background: var(--surface);
+  }
+  .button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+  .button[aria-disabled="true"] { opacity: 0.55; pointer-events: none; }
+  .fineprint { color: var(--muted); font-size: 14px; margin-top: 14px; }
+  .hero { margin: 40px auto 0; }
+  .hero img { width: 100%; height: auto; border-radius: 18px; display: block; }
+  section { padding: 72px 0 0; }
+  h2 { font-size: clamp(28px, 4vw, 36px); letter-spacing: -0.02em; margin: 0 0 24px; text-align: center; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .card h3 { margin: 0 0 6px; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15.5px; }
+  .steps { counter-reset: step; list-style: none; padding: 0; margin: 0 auto; max-width: 640px; }
+  .steps li { counter-increment: step; position: relative; padding: 0 0 18px 48px; color: var(--muted); }
+  .steps li strong { color: var(--text); }
+  .steps li::before {
+    content: counter(step); position: absolute; left: 0; top: 0; width: 32px; height: 32px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent); font-weight: 700; display: grid; place-items: center; font-size: 15px;
+  }
+  .price { max-width: 460px; margin: 0 auto; text-align: center; }
+  .price .amount { font-size: 56px; font-weight: 700; letter-spacing: -0.03em; }
+  .price ul { list-style: none; padding: 0; margin: 12px 0 24px; color: var(--muted); }
+  .price li { padding: 4px 0; }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; margin: 0 auto 10px; max-width: 760px; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { color: var(--muted); margin: 10px 0 0; }
+  kbd { font: 600 0.85em -apple-system, sans-serif; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 6px; padding: 1px 6px; background: var(--surface); }
+  footer { padding: 72px 0 40px; text-align: center; color: var(--muted); font-size: 14px; }
+  footer a, details a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img class="icon" src="icon.png" alt="Paneshift icon">
+    <h1>Paneshift</h1>
+    <p class="tagline">Windows-style Alt-Tab for Mac. <kbd>⌘</kbd> <kbd>Tab</kbd> between every window, with live previews, in an app that weighs almost nothing.</p>
+    <div class="buttons">
+      <a class="button primary" href="https://github.com/lmai5/paneshift/releases/latest/download/Paneshift.zip">Download free trial</a>
+      <a class="button" href="#buy">Buy – $1.99</a>
+    </div>
+    <p class="fineprint">14 days free · macOS 14 or later · Apple Silicon and Intel</p>
+  </header>
+
+  <div class="hero">
+    <img src="hero.png" alt="The Paneshift switcher showing a grid of window previews with titles, one selected">
+  </div>
+
+  <section>
+    <h2>Switch windows, not apps</h2>
+    <div class="grid">
+      <div class="card"><h3>Every window</h3><p>Each window gets its own tile, including minimized ones, so you jump straight to the one you want.</p></div>
+      <div class="card"><h3>Live previews</h3><p>See what's in each window before you switch. Previews appear together, without flicker.</p></div>
+      <div class="card"><h3>Feather-light</h3><p>About 10 MB of memory while idle and no CPU use until you press <kbd>⌘</kbd> <kbd>Tab</kbd>.</p></div>
+      <div class="card"><h3>Keyboard and mouse</h3><p>Tab, Shift+Tab or the arrow keys to move; point at a tile to select it; release <kbd>⌘</kbd> to switch.</p></div>
+      <div class="card"><h3>Built for lots of windows</h3><p>Tiles shrink to fit, then the grid scrolls and follows your selection.</p></div>
+      <div class="card"><h3>Private by design</h3><p>Previews stay in memory while the switcher is open. Nothing is saved or sent anywhere.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Up and running in a minute</h2>
+    <ol class="steps">
+      <li><strong>Download and unzip</strong>, then drag Paneshift to your Applications folder and open it.</li>
+      <li><strong>Allow Accessibility</strong> when the setup window asks. This lets Paneshift take over <kbd>⌘</kbd> <kbd>Tab</kbd>.</li>
+      <li><strong>Allow Screen Recording</strong> if you want window previews. It's optional; without it you'll see app icons.</li>
+      <li><strong>Press <kbd>⌘</kbd> <kbd>Tab</kbd>.</strong> That's it.</li>
+    </ol>
+  </section>
+
+  <section id="buy">
+    <h2>Simple pricing</h2>
+    <div class="price card">
+      <div class="amount">$1.99</div>
+      <ul>
+        <li>One-time payment, no subscription</li>
+        <li>Try everything free for 14 days first</li>
+        <li>License key by email; paste it into Paneshift</li>
+      </ul>
+      <a id="checkout" class="button primary" href="#buy" aria-disabled="true">Checkout opens soon</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Questions</h2>
+    <details><summary>Which Macs does it run on?</summary><p>macOS 14 Sonoma or later, on Apple Silicon and Intel Macs.</p></details>
+    <details><summary>Why does it need Accessibility and Screen Recording?</summary><p>Accessibility lets Paneshift catch <kbd>⌘</kbd> <kbd>Tab</kbd> and bring the window you pick to the front. Screen Recording is only used to draw the window previews; the snapshots stay in memory and are never saved or uploaded. You can skip it and use app icons instead.</p></details>
+    <details><summary>Can I get the normal macOS switcher back?</summary><p>Any time: untick "Windows-style Cmd+Tab" in Paneshift's menu-bar menu, or quit Paneshift. macOS's own switcher returns immediately.</p></details>
+    <details><summary>What happens when the trial ends?</summary><p><kbd>⌘</kbd> <kbd>Tab</kbd> goes back to the macOS default until you enter a license key. Your settings are kept.</p></details>
+    <details><summary>Does it phone home?</summary><p>Only to check your license key with Lemon Squeezy, our payment provider: once when you enter it and about once a week after that. Being offline never locks you out.</p></details>
+    <details><summary>How do I get help?</summary><p>Open an issue on <a href="https://github.com/lmai5/paneshift/issues">GitHub</a>.</p></details>
+  </section>
+
+  <footer>© 2026 Paneshift · <a href="https://github.com/lmai5/paneshift/releases">Release notes</a> · <a href="https://github.com/lmai5/paneshift/issues">Support</a></footer>
+</div>
+<script>
+  // Paste the Lemon Squeezy checkout link here to open sales; the app's Buy button points to this section.
+  const CHECKOUT_URL = "";
+  if (CHECKOUT_URL) {
+    const button = document.getElementById("checkout");
+    button.href = CHECKOUT_URL;
+    button.textContent = "Buy Paneshift – $1.99";
+    button.removeAttribute("aria-disabled");
+  }
+</script>
+</body>
+</html>
