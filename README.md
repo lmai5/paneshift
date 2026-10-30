@@ -14,6 +14,7 @@ about 10 MB of memory.
 - Close and quit from the switcher: ✕ or ⌘W closes a window, ⌘Q quits its app. Closing an app's last
   window quits the app too, like on Windows (optional).
 - Lists windows of menu-bar apps too, such as their settings windows.
+- Apps running with no open windows get a tile too, so you can reopen or quit them.
 - Turn it off or quit any time to get the macOS switcher back.
 
 14-day free trial, then $1.99 once. Requires macOS 14 or later; Apple Silicon and Intel.
